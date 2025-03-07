@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { CartContext } from './context/CartContext';
-
+import { CartContext } from '../context/CartContext';
 
 const products = [
   { id: 1, name: 'Product 1', price: 10 },
@@ -12,7 +11,7 @@ const products = [
 ];
 
 const HomeScreen = ({ navigation }) => {
-  const { addToCart } = useContext(CartContext);
+  const { cart, addToCart } = useContext(CartContext);
 
   const renderProductItem = ({ item }) => (
     <View style={styles.productItem}>
@@ -30,8 +29,9 @@ const HomeScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id.toString()}
       />
       <TouchableOpacity
-        style={styles.cartButton}
+        style={[styles.cartButton, cart.length === 0 && styles.disabledButton]} // Apply disabled style if cart is empty
         onPress={() => navigation.navigate('Cart')}
+        disabled={cart.length === 0} // Disable button if cart is empty
       >
         <Text style={styles.cartButtonText}>Go to Cart</Text>
       </TouchableOpacity>
@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#007bff',
     borderRadius: 8,
     alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc', // Grayed-out background color
   },
   cartButtonText: {
     color: '#fff',
