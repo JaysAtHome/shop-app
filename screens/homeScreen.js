@@ -1,31 +1,43 @@
 import React, { useContext } from 'react';
-import { View, Text, Button, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet } from 'react-native';
 import { CartContext } from '../context/CartContext';
 
-const products = [
-  { id: '1', name: 'Product A', price: 100 },
-  { id: '2', name: 'Product B', price: 150 },
-  { id: '3', name: 'Product C', price: 200 },
-];
+const CheckoutScreen = ({ navigation }) => {
+  const { cart, setCart } = useContext(CartContext);
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-const HomeScreen = ({ navigation }) => {
-  const { addToCart } = useContext(CartContext);
+  const handleCheckout = () => {
+    Alert.alert('Checkout successful', '', [
+      { text: 'OK', onPress: () => { setCart([]); navigation.navigate('Home'); } }
+    ]);
+  };
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
-        data={products}
+        data={cart}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={{ padding: 10 }}>
-            <Text>{item.name} - ${item.price}</Text>
-            <Button title="Add to Cart" onPress={() => addToCart(item)} />
+          <View style={styles.checkoutItem}>
+            <Text style={styles.checkoutText}>{item.name} - ${item.price} x {item.quantity}</Text>
           </View>
         )}
       />
-      <Button title="Go to Cart" onPress={() => navigation.navigate('Cart')} />
+      <Text style={styles.totalText}>Total: ${totalPrice}</Text>
+      <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
+        <Text style={styles.checkoutButtonText}>Checkout</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-export default HomeScreen;
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, backgroundColor: '#f8f9fa' },
+  checkoutItem: { backgroundColor: 'white', padding: 15, marginBottom: 10, borderRadius: 10, elevation: 2 },
+  checkoutText: { fontSize: 16, fontWeight: 'bold' },
+  totalText: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginVertical: 10 },
+  checkoutButton: { backgroundColor: '#28a745', padding: 15, borderRadius: 5, marginTop: 20 },
+  checkoutButtonText: { color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'bold' },
+});
+
+export default CheckoutScreen;
