@@ -1,43 +1,75 @@
 import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet } from 'react-native';
-import { CartContext } from '../context/CartContext';
+import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { CartContext } from './CartContext';
 
-const CheckoutScreen = ({ navigation }) => {
-  const { cart, setCart } = useContext(CartContext);
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+const products = [
+  { id: 1, name: 'Product 1', price: 10 },
+  { id: 2, name: 'Product 2', price: 20 },
+  { id: 3, name: 'Product 3', price: 30 },
+  { id: 4, name: 'Product 4', price: 40 },
+  { id: 5, name: 'Product 5', price: 50 },
+];
 
-  const handleCheckout = () => {
-    Alert.alert('Checkout successful', '', [
-      { text: 'OK', onPress: () => { setCart([]); navigation.navigate('Home'); } }
-    ]);
-  };
+const HomeScreen = ({ navigation }) => {
+  const { addToCart } = useContext(CartContext);
+
+  const renderProductItem = ({ item }) => (
+    <View style={styles.productItem}>
+      <Text style={styles.productName}>{item.name}</Text>
+      <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
+      <Button title="Add to Cart" onPress={() => addToCart(item)} />
+    </View>
+  );
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={cart}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.checkoutItem}>
-            <Text style={styles.checkoutText}>{item.name} - ${item.price} x {item.quantity}</Text>
-          </View>
-        )}
+        data={products}
+        renderItem={renderProductItem}
+        keyExtractor={(item) => item.id.toString()}
       />
-      <Text style={styles.totalText}>Total: ${totalPrice}</Text>
-      <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
-        <Text style={styles.checkoutButtonText}>Checkout</Text>
+      <TouchableOpacity
+        style={styles.cartButton}
+        onPress={() => navigation.navigate('Cart')}
+      >
+        <Text style={styles.cartButtonText}>Go to Cart</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#f8f9fa' },
-  checkoutItem: { backgroundColor: 'white', padding: 15, marginBottom: 10, borderRadius: 10, elevation: 2 },
-  checkoutText: { fontSize: 16, fontWeight: 'bold' },
-  totalText: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginVertical: 10 },
-  checkoutButton: { backgroundColor: '#28a745', padding: 15, borderRadius: 5, marginTop: 20 },
-  checkoutButtonText: { color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'bold' },
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  productItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  productName: {
+    fontSize: 16,
+  },
+  productPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  cartButton: {
+    marginTop: 20,
+    padding: 16,
+    backgroundColor: '#007bff',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  cartButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
-export default CheckoutScreen;
+export default HomeScreen;

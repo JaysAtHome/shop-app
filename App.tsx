@@ -6,18 +6,49 @@ import HomeScreen from './screens/homeScreen';
 import CartScreen from './screens/cartScreen';
 import CheckoutScreen from './screens/checkoutScreen';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Home: undefined;
+  Cart: undefined;
+  Checkout: undefined;
+};
 
-export default function App() {
+const Stack = createStackNavigator<RootStackParamList>();
+
+const App: React.FC = () => {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Cart" component={CartScreen} />
-          <Stack.Screen name="Checkout" component={CheckoutScreen} />
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#007bff', // Custom header background color
+            },
+            headerTintColor: '#fff', // Custom header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', // Custom header title style
+            },
+          }}
+        >
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ title: 'Products' }} // Custom title for Home screen
+          />
+          <Stack.Screen
+            name="Cart"
+            component={CartScreen}
+            options={{ title: 'Your Cart' }} // Custom title for Cart screen
+          />
+          <Stack.Screen
+            name="Checkout"
+            component={CheckoutScreen}
+            options={{ title: 'Checkout' }} // Custom title for Checkout screen
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>
   );
-}
+};
+
+export default App;
