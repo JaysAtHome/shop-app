@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import { CartContext } from '../context/CartContext';
 
 const CheckoutScreen = ({ navigation }) => {
@@ -13,26 +13,31 @@ const CheckoutScreen = ({ navigation }) => {
         {
           text: 'OK',
           onPress: () => {
-            clearCart();
-            navigation.navigate('Home');
+            clearCart(); // Clear the cart after successful checkout
+            navigation.navigate('Home'); // Navigate back to the Home screen
           },
         },
       ]
     );
   };
 
+  const renderCheckoutItem = ({ item }) => (
+    <View style={styles.checkoutItem}>
+      <Image source={{ uri: item.image }} style={styles.productImage} />
+      <View style={styles.itemDetails}>
+        <Text style={styles.itemText}>
+          {item.name} - ${item.price.toFixed(2)} x {item.quantity}
+        </Text>
+      </View>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <FlatList
         data={cart}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.cartItem}>
-            <Text style={styles.itemText}>
-              {item.name} - ${item.price.toFixed(2)} x {item.quantity}
-            </Text>
-          </View>
-        )}
+        renderItem={renderCheckoutItem}
       />
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>Total: ${getTotalPrice().toFixed(2)}</Text>
@@ -50,11 +55,22 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f8f9fa',
   },
-  cartItem: {
+  checkoutItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'white',
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
+  },
+  productImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+    marginRight: 16,
+  },
+  itemDetails: {
+    flex: 1,
   },
   itemText: {
     fontSize: 16,

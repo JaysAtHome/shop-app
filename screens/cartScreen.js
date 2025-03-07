@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { CartContext } from '../context/CartContext';
 
 const CartScreen = ({ navigation }) => {
   const { cart, increaseQuantity, decreaseQuantity, getTotalPrice } = useContext(CartContext);
 
+  // Redirect to Home when cart is empty and reset the navigation stack
   useEffect(() => {
     if (cart.length === 0) {
       navigation.reset({
@@ -13,6 +14,26 @@ const CartScreen = ({ navigation }) => {
       });
     }
   }, [cart, navigation]);
+
+  const renderCartItem = ({ item }) => (
+    <View style={styles.cartItem}>
+      <Image source={{ uri: item.image }} style={styles.productImage} />
+      <View style={styles.itemDetails}>
+        <Text style={styles.itemText}>
+          {item.name} - ${item.price.toFixed(2)} x {item.quantity}
+        </Text>
+        <View style={styles.quantityContainer}>
+          <TouchableOpacity style={styles.button} onPress={() => decreaseQuantity(item.id)}>
+            <Text style={styles.buttonText}>-</Text>
+          </TouchableOpacity>
+          <Text style={styles.quantityText}>{item.quantity}</Text>
+          <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item.id)}>
+            <Text style={styles.buttonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -23,22 +44,7 @@ const CartScreen = ({ navigation }) => {
           <FlatList
             data={cart}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.cartItem}>
-                <Text style={styles.itemText}>
-                  {item.name} - ${item.price.toFixed(2)} x {item.quantity}
-                </Text>
-                <View style={styles.quantityContainer}>
-                  <TouchableOpacity style={styles.button} onPress={() => decreaseQuantity(item.id)}>
-                    <Text style={styles.buttonText}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.quantityText}>{item.quantity}</Text>
-                  <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item.id)}>
-                    <Text style={styles.buttonText}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
+            renderItem={renderCartItem}
           />
           <View style={styles.totalContainer}>
             <Text style={styles.totalText}>Total: ${getTotalPrice().toFixed(2)}</Text>
@@ -59,17 +65,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
   },
   cartItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'white',
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  },
+  productImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+    marginRight: 16,
+  },
+  itemDetails: {
+    flex: 1,
   },
   itemText: {
-    flex: 1,
     fontSize: 16,
+    marginBottom: 8,
   },
   quantityContainer: {
     flexDirection: 'row',
