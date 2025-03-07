@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { CartContext } from './CartContext';
+import { CartContext } from './context/CartContext';
+
 
 const products = [
   { id: 1, name: 'Product 1', price: 10 },
