@@ -22,28 +22,28 @@ const App: React.FC = () => {
           initialRouteName="Home"
           screenOptions={{
             headerStyle: {
-              backgroundColor: '#007bff', // Custom header background color
+              backgroundColor: '#007bff',
             },
-            headerTintColor: '#fff', // Custom header text color
+            headerTintColor: '#fff',
             headerTitleStyle: {
-              fontWeight: 'bold', // Custom header title style
+              fontWeight: 'bold',
             },
           }}
         >
           <Stack.Screen
             name="Home"
             component={HomeScreen}
-            options={{ title: 'Products' }} // Custom title for Home screen
+            options={{ title: 'Products' }}
           />
           <Stack.Screen
             name="Cart"
             component={CartScreen}
-            options={{ title: 'Your Cart' }} // Custom title for Cart screen
+            options={{ title: 'Your Cart' }}
           />
           <Stack.Screen
             name="Checkout"
             component={CheckoutScreen}
-            options={{ title: 'Checkout' }} // Custom title for Checkout screen
+            options={{ title: 'Checkout' }}
           />
         </Stack.Navigator>
       </NavigationContainer>

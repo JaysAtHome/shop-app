@@ -5,7 +5,6 @@ import { CartContext } from '../context/CartContext';
 const CartScreen = ({ navigation }) => {
   const { cart, increaseQuantity, decreaseQuantity, getTotalPrice } = useContext(CartContext);
 
-  // Redirect to Home when cart is empty and reset the navigation stack
   useEffect(() => {
     if (cart.length === 0) {
       navigation.reset({

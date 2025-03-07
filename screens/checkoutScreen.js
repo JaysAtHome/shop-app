@@ -13,8 +13,8 @@ const CheckoutScreen = ({ navigation }) => {
         {
           text: 'OK',
           onPress: () => {
-            clearCart(); // Clear the cart after successful checkout
-            navigation.navigate('Home'); // Navigate back to the Home screen
+            clearCart();
+            navigation.navigate('Home');
           },
         },
       ]

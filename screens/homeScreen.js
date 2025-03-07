@@ -29,9 +29,9 @@ const HomeScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id.toString()}
       />
       <TouchableOpacity
-        style={[styles.cartButton, cart.length === 0 && styles.disabledButton]} // Apply disabled style if cart is empty
+        style={[styles.cartButton, cart.length === 0 && styles.disabledButton]}
         onPress={() => navigation.navigate('Cart')}
-        disabled={cart.length === 0} // Disable button if cart is empty
+        disabled={cart.length === 0}
       >
         <Text style={styles.cartButtonText}>Go to Cart</Text>
       </TouchableOpacity>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   disabledButton: {
-    backgroundColor: '#ccc', // Grayed-out background color
+    backgroundColor: '#ccc',
   },
   cartButtonText: {
     color: '#fff',
