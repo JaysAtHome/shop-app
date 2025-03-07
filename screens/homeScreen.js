@@ -23,20 +23,25 @@ const HomeScreen = ({ navigation }) => {
   console.log('Products:', products); // Debug: Check if products are loaded
   console.log('Cart:', cart); // Debug: Check the cart state
 
-  const renderProductItem = ({ item }) => (
-    <View style={styles.productItem}>
-      <Image source={{ uri: item.image }} style={styles.productImage} />
-      <View style={styles.productDetails}>
-        <Text style={styles.productName} numberOfLines={2} ellipsizeMode="tail">
-          {item.name}
-        </Text>
-        <View style={styles.priceContainer}>
+  const renderProductItem = ({ item }) => {
+    console.log('Rendering product:', item); // Debug: Log each product being rendered
+    return (
+      <View style={styles.productContainer}>
+        <Image
+          source={{ uri: item.image }}
+          style={styles.productImage}
+          onError={(e) => console.log('Image failed to load:', e.nativeEvent.error)} // Debug: Log image loading errors
+        />
+        <View style={styles.productDetails}>
+          <Text style={styles.productName} numberOfLines={2} ellipsizeMode="tail">
+            {item.name}
+          </Text>
           <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
         </View>
+        <Button title="Add to Cart" onPress={() => addToCart(item)} />
       </View>
-      <Button title="Add to Cart" onPress={() => addToCart(item)} />
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -44,6 +49,8 @@ const HomeScreen = ({ navigation }) => {
         data={products}
         renderItem={renderProductItem}
         keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.flatListContent} // Add padding to the FlatList content
+        ListEmptyComponent={<Text>No products available.</Text>} // Show a message if the list is empty
       />
       <TouchableOpacity
         style={[styles.cartButton, cart.length === 0 && styles.disabledButton]}
@@ -60,14 +67,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#4d4d4d',
   },
-  productItem: {
+  flatListContent: {
+    paddingBottom: 20,
+  },
+  productContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'white',
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    marginBottom: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   productImage: {
     width: 80,
@@ -83,17 +99,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
   },
-  priceContainer: {
-    alignItems: 'center',
-  },
   productPrice: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#007bff',
   },
   cartButton: {
     marginTop: 20,
     padding: 16,
-    backgroundColor: '#007bff',
+    backgroundColor: '#008000',
     borderRadius: 8,
     alignItems: 'center',
   },
@@ -101,7 +115,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   cartButtonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },

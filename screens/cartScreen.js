@@ -19,18 +19,17 @@ const CartScreen = ({ navigation }) => {
     <View style={styles.cartItem}>
       <Image source={{ uri: item.image }} style={styles.productImage} />
       <View style={styles.itemDetails}>
-        <Text style={styles.itemText}>
-          {item.name} - ${item.price.toFixed(2)} x {item.quantity}
-        </Text>
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => decreaseQuantity(item.id)}>
-            <Text style={styles.buttonText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantityText}>{item.quantity}</Text>
-          <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item.id)}>
-            <Text style={styles.buttonText}>+</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.itemText}>{item.name}</Text>
+        <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+      </View>
+      <View style={styles.quantityContainer}>
+        <TouchableOpacity style={styles.button} onPress={() => decreaseQuantity(item.id)}>
+          <Text style={styles.buttonText}>-</Text>
+        </TouchableOpacity>
+        <Text style={styles.quantityText}>{item.quantity}</Text>
+        <TouchableOpacity style={styles.button} onPress={() => increaseQuantity(item.id)}>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#4d4d4d',
   },
   cartItem: {
     flexDirection: 'row',
@@ -80,15 +79,21 @@ const styles = StyleSheet.create({
   },
   itemDetails: {
     flex: 1,
+    marginRight: 16,
   },
   itemText: {
     fontSize: 16,
-    marginBottom: 8,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  itemPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#007bff',
   },
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
   },
   button: {
     padding: 8,
@@ -104,6 +109,7 @@ const styles = StyleSheet.create({
   quantityText: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginHorizontal: 10, // Add spacing between buttons and quantity
   },
   totalContainer: {
     padding: 15,
@@ -116,7 +122,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   checkoutButton: {
-    backgroundColor: 'blue',
+    backgroundColor: '#008000',
     padding: 15,
     borderRadius: 5,
     marginTop: 20,

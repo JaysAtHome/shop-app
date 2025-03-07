@@ -22,7 +22,7 @@ const App: React.FC = () => {
           initialRouteName="Home"
           screenOptions={{
             headerStyle: {
-              backgroundColor: '#007bff',
+              backgroundColor: '#008000',
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
